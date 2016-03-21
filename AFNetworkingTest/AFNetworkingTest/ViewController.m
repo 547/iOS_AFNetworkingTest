@@ -23,7 +23,8 @@
     // Do any additional setup after loading the view, typically from a nib.
     savedData=[[NSData alloc]init];
     downloadManager=[AFHTTPSessionManager manager];
-    [self networkingGetRequest];
+//    [self networkingGetRequest];
+    [self testNetwork];
 }
 /*
  1.系统的NSURLConnection
@@ -171,7 +172,31 @@
     [downloadTask resume];
 }
 
-
+#pragma mark==测试网络情况
+-(void)testNetwork
+{
+    AFNetworkReachabilityManager *networkManager=[AFNetworkReachabilityManager sharedManager];
+    [networkManager startMonitoring];//开始监控
+    [networkManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+                NSLog(@"未知");
+                break;
+            case AFNetworkReachabilityStatusNotReachable:
+                NSLog(@"没有网");
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                NSLog(@"付费网络");
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                NSLog(@"wifi");
+                break;
+                
+            default:
+                break;
+        }
+    }];
+}
 
 
 
@@ -183,7 +208,8 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self postTest];
+//    [self postTest];
+    [self testNetwork];
 }
 
 
